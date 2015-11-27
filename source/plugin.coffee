@@ -11,10 +11,15 @@ parseFontWeight = (weight) ->
     else parseInt(weight, 10) or 400
 
 guessDefaultFontWeight = do ->
-  weight = false
+  weight = undefined
+  run    = false
   ->
-    unless weight
-      weight = $('<div class="fr-element"/>').css('font-weight') or $('html,body').css('font-weight')
+    unless run
+      run    = true
+      $el    = $('<div class="fr-element"/>')
+      weight = $el.hide().appendTo('body').css('font-weight')
+      $el.remove()
+      weight ||= $('html,body').css('font-weight')
       weight = parseFontWeight(weight)
     weight
 
@@ -55,12 +60,12 @@ FroalaEditor.RegisterCommand 'fontWeight',
 
   displaySelectionWidth: 30
 
-  defaultSelection: ->
-    guessDefaultFontWeight()
+  defaultSelection: (editor) ->
+    editor.fontWeightDefault ||= guessDefaultFontWeight()
 
   html: ->
     list = []
-    defaultWeight = @opts.fontWeightDefault or guessDefaultFontWeight()
+    defaultWeight = @opts.fontWeightDefault ||= guessDefaultFontWeight()
     for weight in @opts.fontWeight
       list.push '<li><a
         class="fr-command"

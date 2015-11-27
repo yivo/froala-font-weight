@@ -42,11 +42,17 @@
       }
     };
     guessDefaultFontWeight = (function() {
-      var weight;
-      weight = false;
+      var run, weight;
+      weight = void 0;
+      run = false;
       return function() {
-        if (!weight) {
-          weight = $('<div class="fr-element"/>').css('font-weight') || $('html,body').css('font-weight');
+        var $el;
+        if (!run) {
+          run = true;
+          $el = $('<div class="fr-element"/>');
+          weight = $el.hide().appendTo('body').css('font-weight');
+          $el.remove();
+          weight || (weight = $('html,body').css('font-weight'));
           weight = parseFontWeight(weight);
         }
         return weight;
@@ -88,13 +94,13 @@
         return true;
       },
       displaySelectionWidth: 30,
-      defaultSelection: function() {
-        return guessDefaultFontWeight();
+      defaultSelection: function(editor) {
+        return editor.fontWeightDefault || (editor.fontWeightDefault = guessDefaultFontWeight());
       },
       html: function() {
-        var defaultWeight, j, len, list, ref, weight;
+        var base, defaultWeight, j, len, list, ref, weight;
         list = [];
-        defaultWeight = this.opts.fontWeightDefault || guessDefaultFontWeight();
+        defaultWeight = (base = this.opts).fontWeightDefault || (base.fontWeightDefault = guessDefaultFontWeight());
         ref = this.opts.fontWeight;
         for (j = 0, len = ref.length; j < len; j++) {
           weight = ref[j];
