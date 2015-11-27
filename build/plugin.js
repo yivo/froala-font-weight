@@ -79,7 +79,7 @@
       refresh = function($btn) {
         var weight;
         weight = parseFontWeight($(editor.selection.element()).css('font-weight'));
-        $btn.find('> span').text(weight);
+        $btn.find('> span').text(weight).css('font-weight', weight);
       };
       return {
         apply: apply,
@@ -98,13 +98,14 @@
         return editor.fontWeightDefault || (editor.fontWeightDefault = guessDefaultFontWeight());
       },
       html: function() {
-        var base, defaultWeight, j, len, list, ref, weight;
+        var base, defaultWeight, j, len, list, ref, text, weight;
         list = [];
         defaultWeight = (base = this.opts).fontWeightDefault || (base.fontWeightDefault = guessDefaultFontWeight());
         ref = this.opts.fontWeight;
         for (j = 0, len = ref.length; j < len; j++) {
           weight = ref[j];
-          list.push('<li><a class="fr-command" data-cmd="fontWeight" data-param1="' + weight + '" title="' + weight + '">' + (weight === defaultWeight ? weight + " (" + (this.language.translate('Normal Font Weight')) + ")" : weight) + "</a></li>");
+          text = weight === defaultWeight ? weight + " (" + (this.language.translate('Normal Font Weight')) + ")" : weight;
+          list.push(['<li>', '<a class="fr-command"', ' style="font-weight: ', weight, ';"', ' data-cmd="fontWeight"', ' data-param1="', weight, '"', ' title="', weight, '"', '>', text, '</a>', '</li>'].join(''));
         }
         return '<ul class="fr-dropdown-list">' + list.join('') + '</ul>';
       },

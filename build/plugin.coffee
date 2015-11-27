@@ -64,7 +64,7 @@
   
     refresh = ($btn) ->
       weight = parseFontWeight( $(editor.selection.element()).css('font-weight') )
-      $btn.find('> span').text(weight)
+      $btn.find('> span').text(weight).css('font-weight', weight)
       return
   
     {apply, refreshOnShow, refresh}
@@ -86,15 +86,20 @@
       list = []
       defaultWeight = @opts.fontWeightDefault ||= guessDefaultFontWeight()
       for weight in @opts.fontWeight
-        list.push '<li><a
-          class="fr-command"
-          data-cmd="fontWeight"
-          data-param1="' + weight + '"
-          title="' + weight + '">' +
-          (if weight == defaultWeight
-            "#{weight} (#{@language.translate('Normal Font Weight')})"
-          else weight) +
-        "</a></li>"
+        text = if weight == defaultWeight
+          "#{weight} (#{@language.translate('Normal Font Weight')})"
+        else weight
+        list.push [
+          '<li>',
+            '<a class="fr-command"',
+              ' style="font-weight: ', weight, ';"',
+              ' data-cmd="fontWeight"',
+              ' data-param1="', weight, '"',
+              ' title="', weight, '"',
+              '>', text,
+            '</a>'
+          '</li>'
+        ].join('')
   
       '<ul class="fr-dropdown-list">' + list.join('') + '</ul>'
   
