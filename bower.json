@@ -1,0 +1,22 @@
+{
+  "name": "froala-font-weight",
+  "version": "1.0.0",
+  "homepage": "https://github.com/yivo/froala-font-weight",
+  "authors": [
+    "Yaroslav Konoplov <yaroslav@inbox.com>"
+  ],
+  "main": "build/plugin.js",
+  "license": "MIT",
+  "ignore": [
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests",
+    "spec",
+    "coffeespec",
+    "gulpfile.*"
+  ],
+  "dependencies": {
+    "froala-wysiwyg-editor": "^2.0.0"
+  }
+}
