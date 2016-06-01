@@ -14,8 +14,5 @@
     "spec",
     "coffeespec",
     "gulpfile.*"
-  ],
-  "dependencies": {
-    "froala-wysiwyg-editor": "^2.3.0"
-  }
+  ]
 }
