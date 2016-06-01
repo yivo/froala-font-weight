@@ -1,6 +1,5 @@
 {
   "name": "froala-font-weight",
-  "version": "1.0.0",
   "homepage": "https://github.com/yivo/froala-font-weight",
   "authors": [
     "Yaroslav Konoplov <yaroslav@inbox.com>"
@@ -17,6 +16,6 @@
     "gulpfile.*"
   ],
   "dependencies": {
-    "froala-wysiwyg-editor": "^2.0.0"
+    "froala-wysiwyg-editor": "^2.3.0"
   }
 }

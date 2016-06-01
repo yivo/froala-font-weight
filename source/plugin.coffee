@@ -26,7 +26,10 @@ guessDefaultFontWeight = do ->
 FroalaEditor.PLUGINS.fontWeight = (editor) ->
 
   apply = (weight) ->
-    editor.commands.applyProperty('font-weight', weight)
+    if editor.commands.applyProperty?
+      editor.commands.applyProperty('font-weight', weight)
+    else
+      editor.format.applyStyle('font-weight', weight)
     return
 
   refreshOnShow = ($btn, $dropdown) ->

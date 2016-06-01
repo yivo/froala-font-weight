@@ -1,14 +1,26 @@
 (function() {
-  (function(root, factory) {
+  (function(factory) {
+
+    /* Browser and WebWorker */
+    var root;
+    root = (function() {
+      if (typeof self === 'object' && self !== null && self.self === self) {
+        return self;
+
+        /* Server */
+      } else if (typeof global === 'object' && global !== null && global.global === global) {
+        return global;
+      }
+    })();
 
     /* AMD */
-    if (typeof define === 'function' && define.amd) {
-      define(['jquery'], function($) {
+    if (typeof define === 'function' && typeof define.amd === 'object' && define.amd !== null) {
+      define(['jquery', 'exports'], function($) {
         return factory(root, $);
       });
 
       /* CommonJS */
-    } else if (typeof module === 'object' && typeof module.exports === 'object') {
+    } else if (typeof module === 'object' && module !== null && typeof module.exports === 'object' && module.exports !== null) {
       factory(root, require('jquery'));
 
       /* Browser and the rest */
@@ -17,7 +29,7 @@
     }
 
     /* No return value */
-  })(this, function(__root__, $) {
+  })(function(__root__, $) {
     var FroalaEditor, guessDefaultFontWeight, parseFontWeight;
     FroalaEditor = $.FroalaEditor;
     $.extend(FroalaEditor.DEFAULTS, {
@@ -61,7 +73,11 @@
     FroalaEditor.PLUGINS.fontWeight = function(editor) {
       var apply, refresh, refreshOnShow;
       apply = function(weight) {
-        editor.commands.applyProperty('font-weight', weight);
+        if (editor.commands.applyProperty != null) {
+          editor.commands.applyProperty('font-weight', weight);
+        } else {
+          editor.format.applyStyle('font-weight', weight);
+        }
       };
       refreshOnShow = function($btn, $dropdown) {
         var $active, $ul, weight;

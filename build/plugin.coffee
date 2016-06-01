@@ -1,12 +1,21 @@
-((root, factory) ->
+((factory) ->
+
+  # Browser and WebWorker
+  root = if typeof self is 'object' and self isnt null and self.self is self
+    self
+
+  # Server
+  else if typeof global is 'object' and global isnt null and global.global is global
+    global
 
   # AMD
-  if typeof define is 'function' and define.amd
-    define ['jquery'], ($) ->
+  if typeof define is 'function' and typeof define.amd is 'object' and define.amd isnt null
+    define ['jquery', 'exports'], ($) ->
       factory(root, $)
 
   # CommonJS
-  else if typeof module is 'object' && typeof module.exports is 'object'
+  else if typeof module is 'object' and module isnt null and
+          typeof module.exports is 'object' and module.exports isnt null
     factory(root, require('jquery'))
 
   # Browser and the rest
@@ -16,7 +25,7 @@
   # No return value
   return
 
-)(this, (__root__, $) ->
+)((__root__, $) ->
   {FroalaEditor} = $
   
   $.extend FroalaEditor.DEFAULTS,
@@ -45,7 +54,10 @@
   FroalaEditor.PLUGINS.fontWeight = (editor) ->
   
     apply = (weight) ->
-      editor.commands.applyProperty('font-weight', weight)
+      if editor.commands.applyProperty?
+        editor.commands.applyProperty('font-weight', weight)
+      else    
+        editor.format.applyStyle('font-weight', weight)
       return
   
     refreshOnShow = ($btn, $dropdown) ->
@@ -114,7 +126,6 @@
     refreshOnShow: ($btn, $dropdown) ->
       @fontWeight.refreshOnShow($btn, $dropdown)
       return
-  
   # No global variable export
   return
 )
