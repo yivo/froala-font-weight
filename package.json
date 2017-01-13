@@ -31,7 +31,6 @@
     "coffee-script": "^1.12.2",
     "gulp": "^3.9.1",
     "gulp-coffee": "^2.3.3",
-    "gulp-coffee-comments": "yivo/gulp-coffee-comments",
     "gulp-concat": "^2.6.1",
     "gulp-umd-wrap": "^1.0.7",
     "gulp-plumber": "^1.1.0"
