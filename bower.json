@@ -1,18 +1,28 @@
 {
   "name": "froala-font-weight",
-  "homepage": "https://github.com/yivo/froala-font-weight",
-  "authors": [
-    "Yaroslav Konoplov <yaroslav@inbox.com>"
-  ],
+  "description": "Font weight plugin for Froala Editor",
   "main": "build/plugin.js",
+  "authors": [
+    "Yaroslav Konoplov <eahome00@gmail.com>"
+  ],
   "license": "MIT",
+  "keywords": [
+    "froala",
+    "font-weight",
+    "plugin",
+    "font",
+    "text-weight",
+    "wysiwyg"
+  ],
+  "homepage": "https://github.com/yivo/froala-font-weight",
   "ignore": [
+    "**/.*",
     "node_modules",
     "bower_components",
     "test",
-    "tests",
-    "spec",
-    "coffeespec",
-    "gulpfile.*"
-  ]
+    "tests"
+  ],
+  "dependencies": {
+    "froala-editor": "2.x"
+  }
 }

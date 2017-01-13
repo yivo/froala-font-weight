@@ -1,34 +1,21 @@
+
+/*!
+ * froala-font-weight 1.0.3 | https://github.com/yivo/froala-font-weight | MIT License
+ */
+
 (function() {
   (function(factory) {
-
-    /* Browser and WebWorker */
-    var root;
-    root = (function() {
-      if (typeof self === 'object' && self !== null && self.self === self) {
-        return self;
-
-        /* Server */
-      } else if (typeof global === 'object' && global !== null && global.global === global) {
-        return global;
-      }
-    })();
-
-    /* AMD */
+    var __root__;
+    __root__ = typeof self === 'object' && self !== null && self.self === self ? self : typeof global === 'object' && global !== null && global.global === global ? global : Function('return this')();
     if (typeof define === 'function' && typeof define.amd === 'object' && define.amd !== null) {
-      define(['jquery', 'exports'], function($) {
-        return factory(root, $);
+      define(['jquery', 'froala-editor'], function($) {
+        return factory(__root__, $);
       });
-
-      /* CommonJS */
     } else if (typeof module === 'object' && module !== null && typeof module.exports === 'object' && module.exports !== null) {
-      factory(root, require('jquery'));
-
-      /* Browser and the rest */
+      factory(__root__, require('jquery'), require('froala-editor'));
     } else {
-      factory(root, root.$);
+      factory(__root__, $);
     }
-
-    /* No return value */
   })(function(__root__, $) {
     var FroalaEditor, guessDefaultFontWeight, parseFontWeight;
     FroalaEditor = $.FroalaEditor;
@@ -86,7 +73,7 @@
         $dropdown.find('.fr-command[data-param1="' + weight + '"]').addClass('fr-active');
         $ul = $dropdown.find('.fr-dropdown-list');
         $active = $dropdown.find('.fr-active').parent();
-        if ($active.length) {
+        if ($active[0] != null) {
           $ul.parent().scrollTop($active.offset().top - $ul.offset().top - ($ul.parent().outerHeight() / 2 - $active.outerHeight() / 2));
         } else {
           $ul.parent().scrollTop(0);
@@ -95,7 +82,7 @@
       refresh = function($btn) {
         var weight;
         weight = parseFontWeight($(editor.selection.element()).css('font-weight'));
-        $btn.find('> span').text(weight).css('font-weight', weight);
+        $btn.children('span').text(weight).css('font-weight', weight);
       };
       return {
         apply: apply,
@@ -103,6 +90,7 @@
         refresh: refresh
       };
     };
+    FroalaEditor.PLUGINS.fontWeight.VERSION = '1.0.3';
     FroalaEditor.RegisterCommand('fontWeight', {
       type: 'dropdown',
       title: 'Font Weight',
@@ -135,8 +123,6 @@
         this.fontWeight.refreshOnShow($btn, $dropdown);
       }
     });
-
-    /* No global variable export */
   });
 
 }).call(this);

@@ -37,10 +37,10 @@ FroalaEditor.PLUGINS.fontWeight = (editor) ->
 
     $dropdown.find('.fr-command.fr-active').removeClass('fr-active')
     $dropdown.find('.fr-command[data-param1="' + weight + '"]').addClass('fr-active')
-    $ul = $dropdown.find('.fr-dropdown-list')
+    $ul     = $dropdown.find('.fr-dropdown-list')
     $active = $dropdown.find('.fr-active').parent()
 
-    if $active.length
+    if $active[0]?
       $ul.parent().scrollTop($active.offset().top - $ul.offset().top - ($ul.parent().outerHeight() / 2 - $active.outerHeight() / 2))
     else
       $ul.parent().scrollTop(0)
@@ -48,11 +48,13 @@ FroalaEditor.PLUGINS.fontWeight = (editor) ->
 
   refresh = ($btn) ->
     weight = parseFontWeight( $(editor.selection.element()).css('font-weight') )
-    $btn.find('> span').text(weight).css('font-weight', weight)
+    $btn.children('span').text(weight).css('font-weight', weight)
     return
 
   {apply, refreshOnShow, refresh}
 
+FroalaEditor.PLUGINS.fontWeight.VERSION = '1.0.3'
+  
 FroalaEditor.RegisterCommand 'fontWeight',
   type: 'dropdown'
 
@@ -70,7 +72,7 @@ FroalaEditor.RegisterCommand 'fontWeight',
     list = []
     defaultWeight = @opts.fontWeightDefault ||= guessDefaultFontWeight()
     for weight in @opts.fontWeight
-      text = if weight == defaultWeight
+      text = if weight is defaultWeight
         "#{weight} (#{@language.translate('Normal Font Weight')})"
       else weight
       list.push [

@@ -1,26 +1,33 @@
+###!
+# froala-font-weight 1.0.3 | https://github.com/yivo/froala-font-weight | MIT License
+###
+
 ((factory) ->
 
-  # Browser and WebWorker
-  root = if typeof self is 'object' and self isnt null and self.self is self
-    self
+  __root__ = 
+    # The root object for Browser or Web Worker
+    if typeof self is 'object' and self isnt null and self.self is self
+      self
 
-  # Server
-  else if typeof global is 'object' and global isnt null and global.global is global
-    global
+    # The root object for Server-side JavaScript Runtime
+    else if typeof global is 'object' and global isnt null and global.global is global
+      global
 
-  # AMD
+    else
+      Function('return this')()
+
+  # Asynchronous Module Definition (AMD)
   if typeof define is 'function' and typeof define.amd is 'object' and define.amd isnt null
-    define ['jquery', 'exports'], ($) ->
-      factory(root, $)
+    define ['jquery', 'froala-editor'], ($) ->
+      factory(__root__, $)
 
-  # CommonJS
-  else if typeof module is 'object' and module isnt null and
-          typeof module.exports is 'object' and module.exports isnt null
-    factory(root, require('jquery'))
+  # Server-side JavaScript Runtime compatible with CommonJS Module Spec
+  else if typeof module is 'object' and module isnt null and typeof module.exports is 'object' and module.exports isnt null
+    factory(__root__, require('jquery'), require('froala-editor'))
 
-  # Browser and the rest
+  # Browser, Web Worker and the rest
   else
-    factory(root, root.$)
+    factory(__root__, $)
 
   # No return value
   return
@@ -56,7 +63,7 @@
     apply = (weight) ->
       if editor.commands.applyProperty?
         editor.commands.applyProperty('font-weight', weight)
-      else    
+      else
         editor.format.applyStyle('font-weight', weight)
       return
   
@@ -65,10 +72,10 @@
   
       $dropdown.find('.fr-command.fr-active').removeClass('fr-active')
       $dropdown.find('.fr-command[data-param1="' + weight + '"]').addClass('fr-active')
-      $ul = $dropdown.find('.fr-dropdown-list')
+      $ul     = $dropdown.find('.fr-dropdown-list')
       $active = $dropdown.find('.fr-active').parent()
   
-      if $active.length
+      if $active[0]?
         $ul.parent().scrollTop($active.offset().top - $ul.offset().top - ($ul.parent().outerHeight() / 2 - $active.outerHeight() / 2))
       else
         $ul.parent().scrollTop(0)
@@ -76,11 +83,13 @@
   
     refresh = ($btn) ->
       weight = parseFontWeight( $(editor.selection.element()).css('font-weight') )
-      $btn.find('> span').text(weight).css('font-weight', weight)
+      $btn.children('span').text(weight).css('font-weight', weight)
       return
   
     {apply, refreshOnShow, refresh}
   
+  FroalaEditor.PLUGINS.fontWeight.VERSION = '1.0.3'
+    
   FroalaEditor.RegisterCommand 'fontWeight',
     type: 'dropdown'
   
@@ -98,7 +107,7 @@
       list = []
       defaultWeight = @opts.fontWeightDefault ||= guessDefaultFontWeight()
       for weight in @opts.fontWeight
-        text = if weight == defaultWeight
+        text = if weight is defaultWeight
           "#{weight} (#{@language.translate('Normal Font Weight')})"
         else weight
         list.push [
@@ -126,6 +135,6 @@
     refreshOnShow: ($btn, $dropdown) ->
       @fontWeight.refreshOnShow($btn, $dropdown)
       return
-  # No global variable export
+  # Nothing exported
   return
 )
